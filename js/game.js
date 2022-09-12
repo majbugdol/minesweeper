@@ -95,7 +95,9 @@ class Game extends UI {
     const rowIndex = parseInt(target.getAttribute("data-y"), 10);
     const colIndex = parseInt(target.getAttribute("data-x"), 10);
 
-    this.#cells[rowIndex][colIndex].revealCell();
+    const cell = this.#cells[rowIndex][colIndex];
+    if (cell.isFlagged) return;
+    cell.revealCell();
   };
 
   #handleCellContextMenu = (e) => {
