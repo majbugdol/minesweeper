@@ -22,11 +22,6 @@
       calc(2 * var(--border-width))
   );
 }
-/* 
-@font-face {
-  font-family: DIGITALDREAM;
-  src: url(../assets/DIGITALDREAM.ttf);
-} */
 
 *,
 *::after,
