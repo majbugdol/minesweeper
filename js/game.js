@@ -46,7 +46,7 @@ class Game {
       this.#cells[row] = [];
 
       for (let col = 0; col < this.#numberOfCols; col++) {
-        this.#cells[row].push();
+        this.#cells[row].push(new Cell(col, row));
       }
     }
   }
