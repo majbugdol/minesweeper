@@ -8,6 +8,7 @@
   font-family: DIGITALDREAM;
   src: url(../assets/DIGITALDREAM.ttf);
 }
+
 *,
 *::after,
 *::before {
@@ -148,6 +149,7 @@ body {
   height: 4rem;
   cursor: pointer;
 }
+
 .hide {
   visibility: hidden;
 }
