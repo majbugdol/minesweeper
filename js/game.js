@@ -3,6 +3,7 @@ import { UI } from "./UI.js";
 import { Counter } from "./Counter.js";
 import { Timer } from "./Timer.js";
 import { ResetButton } from "./ResetButton.js";
+import { Modal } from "./Modal.js";
 
 class Game extends UI {
   #config = {
@@ -25,6 +26,7 @@ class Game extends UI {
 
   #counter = new Counter();
   #timer = new Timer();
+  #modal = new Modal();
 
   #isGameFinished = false;
   #numberOfRows = null;
@@ -77,6 +79,11 @@ class Game extends UI {
     this.#cellsToReveal =
       this.#numberOfCols * this.#numberOfRows - this.#numberOfMines;
 
+    this.#buttons.reset.changeEmotion("neutral");
+
+    this.#isGameFinished = false;
+    this.#revealedCells = 0;
+
     this.#setStyles();
 
     this.#generateCells();
@@ -91,10 +98,26 @@ class Game extends UI {
   #endGame(isWin) {
     this.#isGameFinished = true;
     this.#timer.stopTimer();
+    this.#modal.buttonText = "Close";
 
     if (!isWin) {
       this.#revealMines();
+      this.#modal.infoText = "You lost, try again";
+      this.#buttons.reset.changeEmotion("negative");
+      this.#modal.setText();
+      this.#modal.toggleModal();
+      return;
     }
+
+    this.#modal.infoText =
+      this.#timer.numberOfSeconds < this.#timer.maxNumberOfSeconds
+        ? `You won! It took tou ${
+            this.#timer.numberOfSeconds
+          }seconds. Congratulations!`
+        : "You won, congratulations!";
+    this.#modal.setText();
+    this.#modal.toggleModal();
+    this.#buttons.reset.changeEmotion("positive");
   }
 
   #generateCells() {
@@ -123,6 +146,8 @@ class Game extends UI {
   }
 
   #addButtonsEventListeners() {
+    this.#buttons.modal.addEventListener("click", this.#modal.toggleModal);
+
     this.#buttons.easy.addEventListener("click", () => {
       this.#handleNewGameClick(
         this.#config.easy.rows,
