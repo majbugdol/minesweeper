@@ -55,7 +55,7 @@ class Game extends UI {
     this.#numberOfCols = cols;
     this.#numberOfMines = mines;
     this.#counter.setValue(this.#numberOfMines);
-    this.#timer.startTimer();
+    // this.#timer.startTimer();
 
     this.#setStyles();
 
@@ -157,7 +157,7 @@ class Game extends UI {
     if (cell.isMine) {
       this.#endGame(false);
     }
-    cell.revealCell();
+    this.#setCellValue(cell);
   }
 
   #revealMines() {
@@ -166,6 +166,48 @@ class Game extends UI {
       .filter(({ isMine }) => isMine)
       .forEach((cell) => cell.revealCell());
     //{} destrukturyzacja - zamiast (cell) => cell.isMine
+  }
+
+  #setCellValue(cell) {
+    let minesCount = 0;
+
+    //sprawdzanie ilości min dookoła wybranego pola:
+    for (
+      let rowIndex = Math.max(cell.y - 1, 0);
+      rowIndex <= Math.min(cell.y + 1, this.#numberOfRows - 1);
+      rowIndex++
+    ) {
+      for (
+        let colIndex = Math.max(cell.x - 1, 0);
+        colIndex <= Math.min(cell.x + 1, this.#numberOfCols - 1);
+        colIndex++
+      ) {
+        if (this.#cells[rowIndex][colIndex].isMine) minesCount++;
+      }
+    }
+
+    cell.value = minesCount;
+    cell.revealCell();
+
+    //odkrywanie wszystkich pustych pól oraz tych z wartością większą od zera w okolicy klikniętego pola, które nie mają min:
+    if (!cell.value) {
+      for (
+        let rowIndex = Math.max(cell.y - 1, 0);
+        rowIndex <= Math.min(cell.y + 1, this.#numberOfRows - 1);
+        rowIndex++
+      ) {
+        for (
+          let colIndex = Math.max(cell.x - 1, 0);
+          colIndex <= Math.min(cell.x + 1, this.#numberOfCols - 1);
+          colIndex++
+        ) {
+          const cell = this.#cells[rowIndex][colIndex];
+          if (!cell.isReveal) {
+            this.#clickCell(cell);
+          }
+        }
+      }
+    }
   }
 
   #setStyles() {
