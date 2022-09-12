@@ -172,6 +172,12 @@ body {
   background-position: center;
 }
 
+.cell--is-mine {
+  background-image: url(../assets/bomb.svg);
+  background-size: 2rem;
+  background-repeat: no-repeat;
+  background-position: center;
+}
 .hide {
   visibility: hidden;
 }
